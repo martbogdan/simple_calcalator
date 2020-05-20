@@ -1,4 +1,4 @@
-# Simple calcalator
+# Simple calculator
 Simple application for android
 * simple operations with two numbers (+ - * /)
 
