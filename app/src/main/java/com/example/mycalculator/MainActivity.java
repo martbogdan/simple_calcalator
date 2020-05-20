@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     TextView textView;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnPoint:
                 String checkPoint = (String) textView.getText();
-                if (!checkPoint.contains(".")) {
+                if (!checkPoint.contains(".") || isOperationSymbolPresent(textView)) {
                     textView.setText(textView.getText() + ".");
                 }
                 break;
@@ -106,20 +107,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (checkLastOperationIndex(textView)) {
                     textView.setText(textView.getText() + "÷");
                 }
+                if (isOperationSymbolPresent(textView)) {
+                    textView.setText(String.valueOf(getResult(textView)));
+                }
                 break;
             case R.id.btnMultiply:
                 if (checkLastOperationIndex(textView)) {
                     textView.setText(textView.getText() + "*");
+                }
+                if (isOperationSymbolPresent(textView)) {
+                    textView.setText(String.valueOf(getResult(textView)));
                 }
                 break;
             case R.id.btnMinus:
                 if (checkLastOperationIndex(textView)) {
                     textView.setText(textView.getText() + "-");
                 }
+                if (isOperationSymbolPresent(textView)) {
+                    textView.setText(String.valueOf(getResult(textView)));
+                }
                 break;
             case R.id.btnPlus:
                 if (checkLastOperationIndex(textView)) {
                     textView.setText(textView.getText() + "+");
+                }
+                if (isOperationSymbolPresent(textView)) {
+                    textView.setText(String.valueOf(getResult(textView)));
                 }
                 break;
             case R.id.btnEqual:
@@ -131,8 +144,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static boolean checkLastOperationIndex(TextView textView) {
         String checkLast = (String) textView.getText();
-        char carLast = checkLast.charAt(checkLast.length()-1);
+        char carLast = checkLast.charAt(checkLast.length() - 1);
         return carLast != '÷' && carLast != '*' && carLast != '-' && carLast != '+';
+    }
+
+    private static boolean isOperationSymbolPresent(TextView textView) {
+        String text = (String) textView.getText();
+        String checkSymbol = text.substring(0, text.length() - 1);
+        return checkSymbol.contains("+") || checkSymbol.contains("-") || checkSymbol.contains("*") || checkSymbol.contains("÷");
     }
 
     private static boolean checkZeroFirst(TextView textView) {
@@ -141,26 +160,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     private static double getResult(TextView textView) {
-        double d1=0.0, d2=0.0, result = 0.0;
+        double d1 = 0.0, d2 = 0.0, result = 0.0;
         char operation = 0;
         String text = (String) textView.getText();
-        if (text.contains("+")||text.contains("-")||text.contains("*")||text.contains("÷")) {
+        if (text.contains("+") || text.contains("-") || text.contains("*") || text.contains("÷")) {
             String[] numbers = text.split("[+*÷\\-]");
             d1 = Double.parseDouble(numbers[0]);
             d2 = Double.parseDouble(numbers[1]);
             for (char c : text.toCharArray()) {
                 if (c == '÷' || c == '*' || c == '-' || c == '+') {
                     operation = c;
+                    break;
                 }
             }
             switch (String.valueOf(operation)) {
                 case "÷":
                     if (d2 == 0) {
                         textView.setText("Error division by 0");
+                    } else {
+                        result = d1 / d2;
                     }
-
-                    result = d1 / d2;
-
                     break;
                 case "*":
                     result = d1 * d2;
