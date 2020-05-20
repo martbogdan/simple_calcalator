@@ -9,23 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btn1;
-    Button btn2;
-    Button btn3;
-    Button btn4;
-    Button btn5;
-    Button btn6;
-    Button btn7;
-    Button btn8;
-    Button btn9;
-    Button btn0;
-    Button btnDivide;
-    Button btnMultiply;
-    Button btnMinus;
-    Button btnPlus;
-    Button btnEqual;
-    Button btnDel;
-    Button btnPoint;
+    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0;
+    Button btnDivide, btnMultiply, btnMinus, btnPlus, btnEqual;
+    Button btnDel, btnPoint;
 
     TextView textView;
 
@@ -66,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn0.setOnClickListener(this);
         btnDel.setOnClickListener(this);
         btnPoint.setOnClickListener(this);
+        btnDivide.setOnClickListener(this);
+        btnMultiply.setOnClickListener(this);
+        btnPlus.setOnClickListener(this);
+        btnMinus.setOnClickListener(this);
+        btnEqual.setOnClickListener(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -73,74 +64,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn1:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("1");
-                } else {
-                    textView.setText(textView.getText() + "1");
-                }
+                textView.setText(checkZeroFirst(textView) ? "1" : textView.getText() + "1");
                 break;
             case R.id.btn2:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("2");
-                } else {
-                    textView.setText(textView.getText() + "2");
-                }
+                textView.setText(checkZeroFirst(textView) ? "2" : textView.getText() + "2");
                 break;
             case R.id.btn3:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("3");
-                } else {
-                    textView.setText(textView.getText() + "3");
-                }
+                textView.setText(checkZeroFirst(textView) ? "3" : textView.getText() + "3");
                 break;
             case R.id.btn4:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("4");
-                } else {
-                    textView.setText(textView.getText() + "4");
-                }
+                textView.setText(checkZeroFirst(textView) ? "4" : textView.getText() + "4");
                 break;
             case R.id.btn5:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("5");
-                } else {
-                    textView.setText(textView.getText() + "5");
-                }
+                textView.setText(checkZeroFirst(textView) ? "5" : textView.getText() + "5");
                 break;
             case R.id.btn6:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("6");
-                } else {
-                    textView.setText(textView.getText() + "6");
-                }
+                textView.setText(checkZeroFirst(textView) ? "6" : textView.getText() + "6");
                 break;
             case R.id.btn7:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("7");
-                } else {
-                    textView.setText(textView.getText() + "7");
-                }
+                textView.setText(checkZeroFirst(textView) ? "7" : textView.getText() + "7");
                 break;
             case R.id.btn8:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("8");
-                } else {
-                    textView.setText(textView.getText() + "8");
-                }
+                textView.setText(checkZeroFirst(textView) ? "8" : textView.getText() + "8");
                 break;
             case R.id.btn9:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("9");
-                } else {
-                    textView.setText(textView.getText() + "9");
-                }
+                textView.setText(checkZeroFirst(textView) ? "9" : textView.getText() + "9");
                 break;
             case R.id.btn0:
-                if (textView.getText().length() == 1 && textView.getText().equals("0")) {
-                    textView.setText("0");
-                } else {
-                    textView.setText(textView.getText() + "0");
-                }
+                textView.setText(checkZeroFirst(textView) ? "0" : textView.getText() + "0");
                 break;
             case R.id.btnDel:
                 textView.setText("0");
@@ -151,8 +102,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     textView.setText(textView.getText() + ".");
                 }
                 break;
-
+            case R.id.btnDivide:
+                if (checkLastOperationIndex(textView)) {
+                    textView.setText(textView.getText() + "÷");
+                }
+                break;
+            case R.id.btnMultiply:
+                if (checkLastOperationIndex(textView)) {
+                    textView.setText(textView.getText() + "*");
+                }
+                break;
+            case R.id.btnMinus:
+                if (checkLastOperationIndex(textView)) {
+                    textView.setText(textView.getText() + "-");
+                }
+                break;
+            case R.id.btnPlus:
+                if (checkLastOperationIndex(textView)) {
+                    textView.setText(textView.getText() + "+");
+                }
+                break;
+            case R.id.btnEqual:
+                textView.setText(String.valueOf(getResult(textView)));
+                break;
         }
 
+    }
+
+    private static boolean checkLastOperationIndex(TextView textView) {
+        String checkLast = (String) textView.getText();
+        char carLast = checkLast.charAt(checkLast.length()-1);
+        return carLast != '÷' && carLast != '*' && carLast != '-' && carLast != '+';
+    }
+
+    private static boolean checkZeroFirst(TextView textView) {
+        return textView.getText().length() == 1 && textView.getText().equals("0");
+    }
+
+    @SuppressLint("SetTextI18n")
+    private static double getResult(TextView textView) {
+        double d1=0.0, d2=0.0, result = 0.0;
+        char operation = 0;
+        String text = (String) textView.getText();
+        if (text.contains("+")||text.contains("-")||text.contains("*")||text.contains("÷")) {
+            String[] numbers = text.split("[+*÷\\-]");
+            d1 = Double.parseDouble(numbers[0]);
+            d2 = Double.parseDouble(numbers[1]);
+            for (char c : text.toCharArray()) {
+                if (c == '÷' || c == '*' || c == '-' || c == '+') {
+                    operation = c;
+                }
+            }
+            switch (String.valueOf(operation)) {
+                case "÷":
+                    if (d2 == 0) {
+                        textView.setText("Error division by 0");
+                    }
+
+                    result = d1 / d2;
+
+                    break;
+                case "*":
+                    result = d1 * d2;
+                    break;
+                case "-":
+                    result = d1 - d2;
+                    break;
+                case "+":
+                    result = d1 + d2;
+                    break;
+            }
+        } else {
+            result = Double.parseDouble(text);
+        }
+
+        return result;
     }
 }
